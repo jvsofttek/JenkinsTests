@@ -20,4 +20,10 @@ pipeline {
       }
     }
   }
+  post {
+    always{
+    }
+    success{
+    }
+  }
 }
