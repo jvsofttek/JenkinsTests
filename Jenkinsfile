@@ -1,59 +1,106 @@
-CODE_CHANGES = getGitChanges()
 pipeline {
-  agent any
-  
-  environment {
-    NEW_VERSION = '1.3.0'
-  }
+    agent any
 
-  stages {
-    stage ('Build') {
-      steps {
-        UiPathPack (
-          outputPath: "Output\\${env.BUILD_NUMBER}",
-          projectJsonPath: "project.json",
-          version: [$class: 'CurrentVersion']
-          useOrchestrator: true,
-          traceLoggingLevel: "None",
-          orchestratorAddress: "OrchestratorUrl",
-          orchestratorTenant: "tenant name",
-          credentials: [$class: 'UserPassAuthenticationEntry', credentialsId: “credentialsId”]
+    // Environment Variables
+    environment {
+        MAJOR = '1'
+        MINOR = '0'
+        //Orchestrator Services
+        UIPATH_ORCH_URL = "https://cloud.uipath.com/"
+        UIPATH_ORCH_LOGICAL_NAME = "vectoritc"
+        UIPATH_ORCH_TENANT_NAME = "Prueba"
+        UIPATH_ORCH_FOLDER_NAME = "Shared"
+    }
+
+    stages {
+        // Printing Basic Information
+        stage('Preparing'){
+            steps {
+                echo "Jenkins Home ${env.JENKINS_HOME}"
+                echo "Jenkins URL ${env.JENKINS_URL}"
+                echo "Jenkins JOB Number ${env.BUILD_NUMBER}"
+                echo "Jenkins JOB Name ${env.JOB_NAME}"
+                echo "GitHub BranchName ${env.BRANCH_NAME}"
+                checkout scm
+            }
+        }
+
+
+         // Build Stages
+        stage('Build') {
+            steps {
+                echo "Building..with ${WORKSPACE}"
+                UiPathPack (
+                      outputPath: "Output\\${env.BUILD_NUMBER}",
+                      projectJsonPath: "project.json",
+                      version: [$class: 'ManualVersionEntry', version: "${MAJOR}.${MINOR}.${env.BUILD_NUMBER}"],
+                      useOrchestrator: false
         )
-      }
-    }
-    stage("build") {
-      when {
-        expression {
-          BRANCH_NAME == 'dev' || CODE_CHANGES == true
+            }
         }
-      }
-      steps {
-        echo 'building the application... '
-        echo "building version ${NEW_VERSION}"
-      }
-    }
-    
-    stage("test") {
-      when {
-        expression {
-          env.BRANCH_NAME == 'dev' || BRANCH_NAME == 'master'
+        /*
+         // Test Stages
+        stage('Test') {
+            steps {
+                echo 'Testing..the workflow...'
+            }
         }
-      }
-      steps {
-        echo 'testing the application2... '
-      }
+
+
+         // Deploy Stages
+        stage('Deploy to UAT') {
+            steps {
+                echo "Deploying ${BRANCH_NAME} to UAT "
+                UiPathDeploy (
+                packagePath: "Output\\${env.BUILD_NUMBER}",
+                orchestratorAddress: "${UIPATH_ORCH_URL}",
+                orchestratorTenant: "${UIPATH_ORCH_TENANT_NAME}",
+                folderName: "${UIPATH_ORCH_FOLDER_NAME}",
+                environments: 'DEV',
+                //credentials: [$class: 'UserPassAuthenticationEntry', credentialsId: 'APIUserKey']
+                credentials: Token(accountName: "${UIPATH_ORCH_LOGICAL_NAME}", credentialsId: 'APIUserKey'),
+
+
+        )
+            }
+        }
+
+
+
+
+         // Deploy to Production Step
+        stage('Deploy to Production') {
+            steps {
+                echo 'Deploy to Production'
+                }
+            }
     }
-    
-    stage("deploy") {
-      steps {
-        echo 'deploying the application... '
-      }
+
+
+    // Options
+    options {
+        // Timeout for pipeline
+        timeout(time:80, unit:'MINUTES')
+        skipDefaultCheckout()
     }
-  }
-  post {
-    always{
+
+
+
+
+    //
+    */
+    post {
+        success {
+            echo 'Deployment has been completed!'
+        }
+        failure {
+          echo "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.JOB_DISPLAY_URL})"
+        }
+        always {
+            /* Clean workspace if success */
+            cleanWs()
+        }
     }
-    success{
-    }
-  }
+
+
 }
