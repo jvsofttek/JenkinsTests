@@ -35,7 +35,7 @@ pipeline {
                       projectJsonPath: "project.json",
                       version: [$class: 'ManualVersionEntry', version: "${MAJOR}.${MINOR}.${env.BUILD_NUMBER}"],
                       useOrchestrator: false
-        )
+                )
             }
         }
         /*
@@ -74,6 +74,7 @@ pipeline {
                 echo 'Deploy to Production'
                 }
             }
+                */
     }
 
 
@@ -88,7 +89,7 @@ pipeline {
 
 
     //
-    */
+
     post {
         success {
             echo 'Deployment has been completed!'
