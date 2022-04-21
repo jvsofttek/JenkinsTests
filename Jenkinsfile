@@ -27,13 +27,13 @@ pipeline {
             }
         }
 
-        stage('Analyze'){
-          steps {
-            echo "Analyzing..."
-            bat  "\"${UIPATH_INSTALLATION_PATH}\\UiPath.Studio.CommandLine.exe\" analyze-file -p \"%cd%\\Main.xaml\""
-          }
+        // stage('Analyze'){
+        //   steps {
+        //     echo "Analyzing..."
+        //     bat  "\"${UIPATH_INSTALLATION_PATH}\\UiPath.Studio.CommandLine.exe\" analyze-file -p \"%cd%\\Main.xaml\""
+        //   }
 
-        }
+        // }
 
          // Build Stages
         stage('Build') {
@@ -49,23 +49,23 @@ pipeline {
                 echo 'Testing..the workflow...'
             }
         }
-
+        */
 
          // Deploy Stages
         stage('Deploy to UAT') {
             steps {
                 echo "Deploying ${BRANCH_NAME} to UAT "
                 UiPathDeploy (
-                packagePath: "Output\\${env.BUILD_NUMBER}",
-                orchestratorAddress: "${UIPATH_ORCH_URL}",
-                orchestratorTenant: "${UIPATH_ORCH_TENANT_NAME}",
-                folderName: "${UIPATH_ORCH_FOLDER_NAME}",
-                environments: 'DEV',
-                //credentials: [$class: 'UserPassAuthenticationEntry', credentialsId: 'APIUserKey']
-                credentials: Token(accountName: "${UIPATH_ORCH_LOGICAL_NAME}", credentialsId: 'APIUserKey'),
+                        packagePath: "result\\UiPath.Jenkins.CICD.Demo.1.0.1.nupkg",//"Output\\${env.BUILD_NUMBER}",
+                        orchestratorAddress: "${UIPATH_ORCH_URL}",
+                        orchestratorTenant: "${UIPATH_ORCH_TENANT_NAME}",
+                        folderName: "${UIPATH_ORCH_FOLDER_NAME}",
+                        environments: 'DEV',
+                        //credentials: [$class: 'UserPassAuthenticationEntry', credentialsId: 'APIUserKey']
+                        credentials: Token(accountName: "${UIPATH_ORCH_LOGICAL_NAME}", credentialsId: 'appSecretCloudCommunity'),
 
 
-        )
+                )
             }
         }
 
@@ -73,12 +73,12 @@ pipeline {
 
 
          // Deploy to Production Step
-        stage('Deploy to Production') {
-            steps {
-                echo 'Deploy to Production'
-                }
-            }
-                */
+        // stage('Deploy to Production') {
+        //     steps {
+        //         echo 'Deploy to Production'
+        //         }
+        //     }
+                
     }
 
 
