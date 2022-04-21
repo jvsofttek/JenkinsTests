@@ -30,7 +30,7 @@ pipeline {
         stage('Analyze'){
           steps {
             echo "Analyzing..."
-            bat  "\"${UIPATH_INSTALLATION_PATH}\\UiPath.Studio.CommandLine.exe\" analyze -p \"%cd%\\project.json\""
+            bat  "\"${UIPATH_INSTALLATION_PATH}\\UiPath.Studio.CommandLine.exe\" analyze-file -p \"%cd%\\Main.xaml\""
           }
 
         }
