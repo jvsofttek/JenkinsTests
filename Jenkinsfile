@@ -10,6 +10,8 @@ pipeline {
         UIPATH_ORCH_LOGICAL_NAME = "vectoritc"
         UIPATH_ORCH_TENANT_NAME = "Prueba"
         UIPATH_ORCH_FOLDER_NAME = "Shared"
+
+        UIPATH_INSTALLATION_PATH = "C:\\Users\\jvelazquez\\AppData\\Local\\Programs\\UiPath\\Studio"
     }
 
     stages {
@@ -38,7 +40,7 @@ pipeline {
                 // )
                 bat "DIR"
 
-                bat  '"C:\\Users\\jvelazquez\\AppData\\Local\\Programs\\UiPath\\Studio\\UiPath.Studio.CommandLine.exe" publish -p "%cd%\\project.json" --target Custom -f "%cd%\\result"'
+                bat  "${UIPATH_INSTALLATION_PATH}\\UiPath.Studio.CommandLine.exe\" publish -p \"%cd%\\project.json\" --target Custom -f \"%cd%\\result"
             }
         }
         /*
