@@ -40,7 +40,7 @@ pipeline {
                 // )
                 bat "DIR"
 
-                bat  "${UIPATH_INSTALLATION_PATH}\\UiPath.Studio.CommandLine.exe\" publish -p \"%cd%\\project.json\" --target Custom -f \"%cd%\\result"
+                bat  "\"${UIPATH_INSTALLATION_PATH}\\UiPath.Studio.CommandLine.exe\" publish -p \"%cd%\\project.json\" --target Custom -f \"%cd%\\result\""
             }
         }
         /*
