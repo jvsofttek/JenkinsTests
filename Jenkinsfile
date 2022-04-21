@@ -38,7 +38,7 @@ pipeline {
                 // )
                 bat "DIR UiPathProject"
 
-                bat  '"UiPath.Studio.CommandLine.exe" publish -p "%cd%\\project.json" --target Custom -f "%cd%\\result"'
+                bat  '"%LocalAppData%\\Programs\\UiPath\\Studio\\UiPath.Studio.CommandLine.exe" publish -p "%cd%\\project.json" --target Custom -f "%cd%\\result"'
             }
         }
         /*
