@@ -55,17 +55,37 @@ pipeline {
         stage('Deploy to UAT') {
             steps {
                 echo "Deploying ${BRANCH_NAME} to UAT "
+                // UiPathDeploy (
+                //         packagePath: "result\\UiPath.Jenkins.CICD.Demo.1.0.1.nupkg",//"Output\\${env.BUILD_NUMBER}",
+                //         orchestratorAddress: "${UIPATH_ORCH_URL}",
+                //         orchestratorTenant: "${UIPATH_ORCH_TENANT_NAME}",
+                //         folderName: "${UIPATH_ORCH_FOLDER_NAME}",
+                //         environments: 'DEV',
+                //         //credentials: [$class: 'UserPassAuthenticationEntry', credentialsId: 'APIUserKey']
+                //         credentials: Token(accountName: "${UIPATH_ORCH_LOGICAL_NAME}", credentialsId: 'appSecretCloudCommunity'),
+
+
+                // )
+
+
                 UiPathDeploy (
-                        packagePath: "result\\UiPath.Jenkins.CICD.Demo.1.0.1.nupkg",//"Output\\${env.BUILD_NUMBER}",
-                        orchestratorAddress: "${UIPATH_ORCH_URL}",
-                        orchestratorTenant: "${UIPATH_ORCH_TENANT_NAME}",
-                        folderName: "${UIPATH_ORCH_FOLDER_NAME}",
-                        environments: 'DEV',
-                        //credentials: [$class: 'UserPassAuthenticationEntry', credentialsId: 'APIUserKey']
-                        credentials: Token(accountName: "${UIPATH_ORCH_LOGICAL_NAME}", credentialsId: 'appSecretCloudCommunity'),
-
-
+                  credentials: 
+                    ExternalApp(
+                      accountForApp: 'vectoritc', 
+                      applicationId: '9771851e-53b2-47b0-8708-e0e4ae370075', 
+                      applicationScope: 'OR.Assets OR.BackgroundTasks OR.Execution OR.Folders OR.Jobs OR.Machines.Read OR.Robots.Read OR.Settings.Read OR.TestSetExecutions OR.TestSets OR.TestSetSchedules OR.Users.Read', 
+                      applicationSecret: 'appSecretCloudCommunity', 
+                      identityUrl: 'https://cloud.uipath.com/'), 
+                  entryPointPaths: 'Main.xaml', 
+                  environments: '', 
+                  folderName: "${UIPATH_ORCH_FOLDER_NAME}", 
+                  orchestratorAddress: "${UIPATH_ORCH_URL}", 
+                  orchestratorTenant: "${UIPATH_ORCH_TENANT_NAME}", 
+                  packagePath: "result\\UiPath.Jenkins.CICD.Demo.1.0.1.nupkg",//"Output\\${env.BUILD_NUMBER}",
+                  traceLevel: 'None'
                 )
+
+
             }
         }
 
