@@ -36,6 +36,7 @@ pipeline {
                 //       useOrchestrator: false,
                 //       traceLevel: "None"
                 // )
+                bat "DIR UiPathProject"
 
                 bat  '"C:\\Users\\jvelazquez\\AppData\\Local\\Programs\\UiPath\\Studio\\UiPath.Studio.CommandLine.exe" publish -p "UiPathProject\\project.json" --target Custom -f "result"'
             }
