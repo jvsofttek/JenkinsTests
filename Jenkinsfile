@@ -27,19 +27,18 @@ pipeline {
             }
         }
 
+        stage('Analyze'){
+          steps {
+            echo "Analyzing..."
+            bat  "\"${UIPATH_INSTALLATION_PATH}\\UiPath.Studio.CommandLine.exe\" analyze-project \"%cd%\\project.json\""
+          }
+
+        }
+
          // Build Stages
         stage('Build') {
             steps {
                 echo "Building..with ${WORKSPACE}"
-                // UiPathPack (
-                //       outputPath: "Output\\${env.BUILD_NUMBER}",
-                //       projectJsonPath: "project.json",
-                //       version: [$class: 'ManualVersionEntry', version: "${MAJOR}.${MINOR}.${env.BUILD_NUMBER}"],
-                //       useOrchestrator: false,
-                //       traceLevel: "None"
-                // )
-                bat "DIR"
-
                 bat  "\"${UIPATH_INSTALLATION_PATH}\\UiPath.Studio.CommandLine.exe\" publish -p \"%cd%\\project.json\" --target Custom -f \"%cd%\\result\""
             }
         }
